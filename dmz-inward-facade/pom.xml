@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>dmz-inward</artifactId>
+        <groupId>com.dmz.inward</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>dmz-inward-facade</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.dmz.inward</groupId>
+            <artifactId>dmz-inward-expose</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--add spring-ws dependencies-->
+        <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-core</artifactId>
+        </dependency>
+        <!--end add spring-ws dependencies-->
+
+        <!--add junit and spring-test-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <!--end add junit and spring-test-->
+
+        <!--start add dubbo and zkClient dependencies-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+        </dependency>
+        <!--end add dubbo and zkClient dependencies-->
+
+        <!--start add rocketmq dependencies-->
+        <dependency>
+            <groupId>com.alibaba.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+        </dependency>
+        <!--end add rocketmq dependencies-->
+
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>javadoc-generator</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>wsdl-generator</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jvnet.jaxb2.maven2</groupId>
+                        <artifactId>maven-jaxb2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <schemaLanguage>WSDL</schemaLanguage>
+                            <generatePackage>englishchinese.wsdl</generatePackage>
+                            <encoding>UTF-8</encoding>
+                            <schemas>
+                                <schema>
+                                    <url>wsdl/EnglishChinese.asmx</url>
+                                </schema>
+                            </schemas>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

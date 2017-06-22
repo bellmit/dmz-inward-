@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--扫描模块对应的包 -->
+    <context:component-scan base-package="com.dmz.web"
+                            use-default-filters="false">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <bean id="frontInterceptor" class="com.dmz.web.advisor.FrontInterceptor"/>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <!--是否启用后缀匹配-->
+        <property name="useSuffixPatternMatch" value="true"/>
+        <property name="interceptors">
+        <list>
+        <ref bean="frontInterceptor"/>
+        <!--<ref bean="logNDCInteceptor"/>   &lt;!&ndash; 日志拦截器 &ndash;&gt;-->
+        <!--<ref bean="myRequestHelperInteceptor"/>   &lt;!&ndash; RequestHelper拦截器&ndash;&gt;-->
+        <!--<ref bean="myPermissionsInteceptor"/>  &lt;!&ndash; 权限拦截器&ndash;&gt;-->
+        <!--<ref bean="myUserInfoInteceptor"/>  &lt;!&ndash; 用户信息拦截器&ndash;&gt;-->
+        </list>
+        </property>
+    </bean>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="byteArray_hmc"/>
+                <ref bean="string_hmc"/>
+                <ref bean="resource_hmc"/>
+                <ref bean="source_hmc"/>
+                <ref bean="xmlAwareForm_hmc"/>
+                <ref bean="jaxb2RootElement_hmc"/>
+                <ref bean="mappingFastjsonHttpMessageConverter"/>
+                <!--<ref bean="mappingJackson2HttpMessageConverter"/>-->
+                <ref bean="form_hmc"/>
+            </list>
+        </property>
+        <property name="webBindingInitializer" ref="webBinding"/>
+    </bean>
+
+    <bean id="mappingJackson2HttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="mappingFastjsonHttpMessageConverter"
+          class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+        <!--<property name="supportedMediaTypes">-->
+        <!--<list>-->
+        <!--<value>application/x-www-form-urlencoded; charset=UTF-8</value>-->
+        <!--</list>-->
+        <!--</property>-->
+    </bean>
+    <bean id="byteArray_hmc" class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/><!-- 处理.. -->
+    <bean id="string_hmc" class="org.springframework.http.converter.StringHttpMessageConverter"/><!-- 处理.. -->
+    <bean id="resource_hmc" class="org.springframework.http.converter.ResourceHttpMessageConverter"/><!-- 处理.. -->
+    <bean id="source_hmc" class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/><!-- 处理.. -->
+    <bean id="form_hmc" class="org.springframework.http.converter.FormHttpMessageConverter"/> <!-- 处理-->
+    <bean id="xmlAwareForm_hmc"
+          class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"/><!-- 处理.. -->
+    <bean id="jaxb2RootElement_hmc"
+          class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/><!-- 处理.. -->
+    <!--<bean id="marshallingHttpMessageConverter"-->
+    <!--class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">-->
+    <!--<property name="marshaller" ref="castorMarshaller"/>-->
+    <!--<property name="unmarshaller" ref="castorMarshaller"/>-->
+    <!--</bean>-->
+    <!--<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/>-->
+
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="contentNegotiationManager" ref="cnManager"/>
+        <property name="viewResolvers">
+            <list><!-- 针对freemarker的视图配置 -->
+                <!--<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">-->
+                <!--<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>-->
+                <!--<property name="viewNames" value=".ftl"/>-->
+                <!--<property name="contentType" value="text/html; charset=utf-8"/>-->
+                <!--<property name="cache" value="true" />-->
+                <!--<property name="prefix" value="" />-->
+                <!--<property name="suffix" value="" />-->
+                <!--<property name="order" value="2"/>-->
+                <!--</bean>-->
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="prefix" value="/WEB-INF/views/"></property><!-- 配置页面路径 -->
+                    <property name="suffix" value=".jsp"></property><!-- 文件以value值结尾 -->
+                    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+                </bean>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <!--将 POJO 对象转换成 JSON 视图-->
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+                    <property name="prettyPrint" value="true"/>
+                    <property name="contentType" value="text/plain"/>
+                </bean>
+
+                <!--这个视图解析器依赖于JAXB2编组/解组产生XML输出,domain类需要和JAXB2注释进行注释。 -->
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <constructor-arg>
+                        <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+                            <property name="classesToBeBound">
+                                <list>
+                                    <value>com.dmz.basic.model.Login</value>
+                                </list>
+                            </property>
+                        </bean>
+                    </constructor-arg>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cnManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="ignoreAcceptHeader" value="true"/>
+        <!--支持 url .json形式-->
+        <property name="favorPathExtension" value="true"/>
+        <property name="defaultContentType" value="text/html"/>
+
+        <!--支持 url ?format=json形式-->
+        <!--<property name="favorParameter" value="true"/>-->
+
+        <!--指定格式返回内容映射-->
+        <property name="mediaTypes">
+            <map>
+                <entry key="xml" value="application/xml"/>
+                <entry key="json" value="text/plain"/>
+                <entry key="xls" value="application/vnd.ms-excel"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 默认编码 -->
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!-- 文件大小最大值 上传文件大小限制为10M，10*1024*1024 -->
+        <property name="maxUploadSize" value="10485760"/>
+        <!-- 内存中的最大值 -->
+        <property name="maxInMemorySize" value="4096"/>
+    </bean>
+
+    <bean id="webBinding" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+        <property name="validator" ref="validator"/>
+    </bean>
+
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <!-- 提供检验机制的类： 此处用的而是Hibernate校验器，但是跟Hibernate没有关系 -->
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 指定校验的使用的资源文件, 如果不需要额外的错误配置文件，就不用配置该属性，
+         在配置文件中配置k-v的错误提示信息，如果不指定则使用默认配置：classpath下的ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <!--&lt;!&ndash;国际化&ndash;&gt;-->
+    <!--<bean id="messageSource"-->
+          <!--class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
+        <!--<property name="basenames">-->
+            <!--<list>-->
+                <!--<value>messages</value>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--<property name="defaultEncoding" value="UTF-8"/>-->
+        <!--&lt;!&ndash;Do not use this in a production environment!&ndash;&gt;-->
+        <!--<property name="cacheSeconds" value="60"/>-->
+    <!--</bean>-->
+
+    <!--名字必须指定为 messageSource-->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="useCodeAsDefaultMessage" value="false"/>
+    </bean>
+
+    <!--config servlet3.0 config-->
+    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />-->
+    <!--end config servlet3.0 config-->
+
+    <bean id="webLoggerAdvisor" class="com.dmz.web.advisor.LoggerAdvisor"/>
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>*Front</value>
+            </list>
+        </property>
+        <!--拦截器-->
+        <property name="interceptorNames">
+            <list>
+                <!--<value>loggerAdvisor</value>-->
+                <idref bean="webLoggerAdvisor"/>
+                <!-- idref bean会进行检测是否存在,作用同<value>,value不做检测 || idref local属性4.0以后被移出-->
+            </list>
+        </property>
+    </bean>
+    <!--<mvc:annotation-driven />-->
+    <mvc:resources mapping="/js/**" location="/WEB-INF/js/" cache-period="31556926"/>
+    <mvc:resources mapping="/views/**" location="/WEB-INF/views/" cache-period="31556926"/>
+
+    <!--<mvc:annotation-driven validator="validator"/>-->
+
+    <bean id="/startController" class="com.dmz.web.controller.SimpleController"/>
+
+    <!-- 处理器映射器 将bean的name作为url进行查找 ，
+    需要在配置Handler时指定beanname（就是url）,Spring MVC default create-->
+    <!--<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>-->
+
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <!-- 属性mappings是一个映射列表 键值对 key=访问路径
+             value（控制器id）= id为StartController的bean -->
+            <props>
+                <prop key="start.do">/startController</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- 处理器适配器 所有handler都实现 Controller -->
+    <!--<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>-->
+
+</beans>

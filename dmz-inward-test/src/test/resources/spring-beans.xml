@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-lazy-init="false">
+
+    <!--<context:component-scan base-package="com.dmz.test.bean" />-->
+
+    <!--<bean id="po" class="com.dmz.test.bean.FakePeople"  />-->
+
+    <!--&lt;!&ndash;当autowire-candidate is false ,the DI must point the specific name.-->
+    <!--By type,will not find the class DI&ndash;&gt;-->
+    <!--<bean id="people2" class="com.dmz.test.bean.People"  autowire-candidate="false"/>-->
+
+    <!--<bean id="people3" class="com.dmz.test.bean.People">-->
+        <!--&lt;!&ndash;Resource(name="ppp") 将不起作用,Resource(name="people3) 同样可以实现DI" &ndash;&gt;-->
+
+            <!--&lt;!&ndash;或者　@Autowired&ndash;&gt;-->
+            <!--&lt;!&ndash;@Qualifier(value = "ppp")&ndash;&gt;-->
+        <!--<qualifier value="ppp"/>-->
+    <!--</bean>-->
+
+    <bean id="person" class="com.dmz.test.bean.Person">
+        <property name="name" value="DMZ"/>
+        <property name="properties" value=""/>
+    </bean>
+
+    <!--<bean id="logPerson" class="com.dmz.test.bean.LogFactoryBean">-->
+        <!--<property name="interfaceName" value="com.dmz.test.bean.IPerson"/>-->
+        <!--<property name="targetClass" ref="person"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="customResource" class="dmz.CustomResourceLoader"/>-->
+
+    <!--<bean id="resourceInject" class="dmz.CustomResourceInjection">-->
+        <!--<property name="resource">-->
+            <!--<value>classpath:xml-test.xml</value>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">-->
+        <!--<property name="basename">-->
+            <!--<value>messages</value>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="messageLoader" class="dmz.MessageResourceInject"/>-->
+</beans>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd
+	   http://code.alibabatech.com/schema/dubbo
+	   http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false">
+
+    <!-- start WebService consume-->
+    <!--<bean class="com.dmz.service.webservice.client.WebServiceConfiguration">-->
+        <!--<property name="INFOS">-->
+            <!--<list>-->
+                <!--<bean class="com.dmz.service.webservice.client.WebServiceClient">-->
+                    <!--<property name="qname" value="http://www.webxml.com.cn/WebServices/WeatherWebService.asmx"/>-->
+                    <!--<property name="packAge" value="com.dmz.webservice.client.weather"/>-->
+                <!--</bean>-->
+                <!--<bean class="com.dmz.service.webservice.client.WebServiceClient">-->
+                    <!--<property name="qname" value="http://fy.webxml.com.cn/webservices/EnglishChinese.asmx"/>-->
+                    <!--<property name="packAge" value="com.dmz.webservice.client.englishchinese"/>-->
+                    <!--<property name="soap_version" value="SOAP 1.1 Protocol"/>-->
+                    <!--<property name="soap_action" value="http://WebXml.com.cn/TranslatorString"/>-->
+                <!--</bean>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!-- end WebService consume-->
+
+    <!--start dubbo consume service-->
+    <dubbo:application name="dmz-consumer"/>
+    <!--<dubbo:registry address ="zookeeper://192.168.23.113:2181" group="newdubbo"  />-->
+    <dubbo:reference interface="com.dmz.service.dubbo.invoke.UserDmz"  id="ym"/>
+    <!--end dubbo consume service-->
+
+    <!--start rocketMQ consume service-->
+    <!--<bean id="rocketConsumer" class="com.dmz.service.mq.listener.RocketMQConsumer">-->
+        <!--<property name="namesrvAddr" value="${mq.consumer.namesrvAddr}" />-->
+        <!--<property name="consumerGroup" value="${mq.consumer.consumerGroup}" />-->
+        <!--<property name="topics">-->
+            <!--<map>-->
+                <!--<entry key="${mq.consumer.dmz-inward}" value="${mq.consumer.dmz-inward.subExpression}"/>-->
+            <!--</map>-->
+        <!--</property>-->
+        <!--<property name="messageListener" ref="consumerListern"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="consumerListern" class="com.dmz.service.mq.listener.DConsumerListern"/>-->
+    <!--end rocketMQ consume service-->
+
+
+</beans>

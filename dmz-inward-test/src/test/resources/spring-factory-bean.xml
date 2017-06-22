@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false">
+
+    <!--http://www.springframework.org/schema/beans/spring-beans-3.0.xsd-->
+    <!--Spring automatically picks the highest version available from the project dependencies (jars). -->
+    <!--Also, as the project evolves and the Spring version will be updated, -->
+    <!--we won’t have to maintain all the XML config files to see the new features.-->
+
+    <bean id="carOne" class="com.dmz.test.bean.StaticFactoryClassTest"
+          factory-method="getCar">
+        <constructor-arg value="audi"/>
+    </bean>
+
+    <!--非静态工厂类的配置-->
+    <bean id="factoryClass" class="com.dmz.test.bean.FactoryClassTest"/>
+
+    <bean id="carTwo" factory-bean="factoryClass"
+          factory-method="getCar">
+        <constructor-arg type="java.lang.String" value="tesla"/>
+    </bean>
+
+    <bean id="classRoomFake" class="com.dmz.test.bean.ClassRoomFake"  autowire="byType"/>
+
+    <!--<bean class="com.dmz.test.bean.FakePeople"/>-->
+    <!--<bean id="people2" class="com.dmz.test.bean.People"/>-->
+    <bean class="com.dmz.test.bean.People"/>
+
+</beans>

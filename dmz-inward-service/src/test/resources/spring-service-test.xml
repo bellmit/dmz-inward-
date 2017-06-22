@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="false">
+
+    <import resource="spring-basic-test.xml"/>
+
+    <!-- 扫描模块对应的包 -->
+    <context:component-scan base-package="com.dmz.service">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--advisor|interceptor-->
+    <bean class="com.dmz.service.advisor.LoggerAdvisor" id="loggerAdvisor"/>
+    <bean class="com.dmz.service.advisor.LoggerExceptionAdvice" id="loggerExceptionAdvice"/>
+    <!--<bean class="com.dmz.service.advisor.WriteReadAdvisor" id="writeReadAdvisor"/>-->
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>*Service</value>
+            </list>
+        </property>
+        <!--拦截器-->
+        <property name="interceptorNames">
+            <list>
+                <idref bean="loggerAdvisor"/>
+                <value>transactionInterceptor</value>
+                <!--<idref bean="writeReadAdvisor"/>-->
+                <!-- idref bean会进行检测是否存在,作用同<value>,value不做检测 || idref local属性4.0以后被移出-->
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>*Dao</value>
+            </list>
+        </property>
+        <!--拦截器-->
+        <property name="interceptorNames">
+            <list>
+                <!--<idref bean="loggerExceptionAdvice"/>-->
+                <value>druidStatInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="yingmiClient" class="com.dmz.TestFactoryBean" factory-method="getMockBean">
+        <constructor-arg value="com.dmz.service.YingmiClient"/>
+    </bean>
+</beans>

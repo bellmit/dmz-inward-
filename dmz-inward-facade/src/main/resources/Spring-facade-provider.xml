@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd
+	   http://code.alibabatech.com/schema/dubbo
+	   http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false">
+
+    <!--start dubbo provider service-->
+    <!--<dubbo:registry address ="zookeeper://192.168.23.113:2181" group="newdubbo"  />-->
+    <dubbo:registry address ="zookeeper://192.168.23.113:2181"  />
+
+    <dubbo:application name ="Provider" />
+    <bean id="dmz" class="com.dmz.service.dubbo.provider.UserDmzDubbo" />
+    <dubbo:service  interface="com.dmz.service.dubbo.invoke.UserDmz"  ref="dmz"   />
+    <!--end dubbo provider service-->
+
+    <!--start rocketMQ provider service-->
+    <!--<bean id="rocketMQ" class="com.dmz.service.mq.RocketMQProducer">-->
+        <!--<property name="namesrvAddr" value="${mq.producer.namesrvAddr}"/>-->
+        <!--<property name="producerGroup" value="${mq.producer.producerGroup}"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="rocketMQService" class="com.dmz.service.mq.RocketMQService"/>-->
+    <!--end rocketMQ provider service-->
+
+</beans>
