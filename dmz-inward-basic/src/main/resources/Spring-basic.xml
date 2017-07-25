@@ -33,6 +33,8 @@
         <property name="maxWait" value="${druid.maxWait}" />
 
         <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒.(建议小于mysql的waite_timeout,mysql_waite_timeout一个连接长时间没有访问，则关闭连接，默认为8小时) -->
+        <!--设置 testWhileIdle="true" timeBetweenEvictionRunsMillis="10000" validationQuery="select 1"
+            使得定时去用query检测处于idle状态的连接,也就刷新了服务器端的时间-->
         <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}" />
 
         <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->

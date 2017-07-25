@@ -12,7 +12,8 @@ public class DubboConsumerStart {
     public static void main(String[] args) {
         BeanFactory context = new ClassPathXmlApplicationContext("Spring-facade-consumer.xml");
         UserDmz userDmz = context.getBean("ym", UserDmz.class);
-        System.out.println(userDmz.showUserName());
+        userDmz.showUserName();
+        //System.out.println(account);
 
     }
 }

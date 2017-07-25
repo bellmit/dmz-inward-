@@ -63,7 +63,7 @@ public class LogFilter {
         Map<String, MaskPosition> maskFieldMap = new HashMap<>();
         List<String> excludeFields = new ArrayList<>();
 
-        for (Field field : fields) {
+        for (final Field field : fields) {
 
             LogMask logMask = field.getAnnotation(LogMask.class);
             if (logMask != null) {

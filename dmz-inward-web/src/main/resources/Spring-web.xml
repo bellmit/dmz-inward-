@@ -11,20 +11,37 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <!--扫描模块对应的包 -->
-    <context:component-scan base-package="com.dmz.web"
-                            use-default-filters="false">
+    <context:component-scan base-package="com.dmz.web" use-default-filters="false">
+
         <context:include-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller"/>
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+
     </context:component-scan>
 
 
+    <!--<mvc:annotation-driven/>-->
+
+    <!--<bean id="sender" class="zipkin.reporter.okhttp3.OkHttpSender" factory-method="create"-->
+          <!--destroy-method="close">-->
+        <!--<constructor-arg type="java.lang.String" value="http://localhost:9411/api/v1/spans"/>-->
+    <!--</bean>-->
+
     <bean id="frontInterceptor" class="com.dmz.web.advisor.FrontInterceptor"/>
+
+
+    <bean id="tracingHandlerInterceptor" class="com.dmz.web.advisor.TracingRquestHandlerInterceptor" factory-method="create">
+        <constructor-arg type="brave.http.HttpTracing" ref="httpTracing"/>
+    </bean>
+
+
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
         <!--是否启用后缀匹配-->
         <property name="useSuffixPatternMatch" value="true"/>
         <property name="interceptors">
         <list>
-        <ref bean="frontInterceptor"/>
+            <ref bean="tracingHandlerInterceptor"/>
         <!--<ref bean="logNDCInteceptor"/>   &lt;!&ndash; 日志拦截器 &ndash;&gt;-->
         <!--<ref bean="myRequestHelperInteceptor"/>   &lt;!&ndash; RequestHelper拦截器&ndash;&gt;-->
         <!--<ref bean="myPermissionsInteceptor"/>  &lt;!&ndash; 权限拦截器&ndash;&gt;-->
@@ -47,6 +64,22 @@
             </list>
         </property>
         <property name="webBindingInitializer" ref="webBinding"/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+        <property name="messageConverters">
+            <list>
+                <ref bean="byteArray_hmc"/>
+                <ref bean="string_hmc"/>
+                <ref bean="resource_hmc"/>
+                <ref bean="source_hmc"/>
+                <ref bean="xmlAwareForm_hmc"/>
+                <ref bean="jaxb2RootElement_hmc"/>
+                <ref bean="mappingFastjsonHttpMessageConverter"/>
+                <!--<ref bean="mappingJackson2HttpMessageConverter"/>-->
+                <ref bean="form_hmc"/>
+            </list>
+        </property>
     </bean>
 
     <bean id="mappingJackson2HttpMessageConverter"
@@ -157,8 +190,12 @@
 
     <bean id="webBinding" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
         <property name="validator" ref="validator"/>
+        <!--<property name="autoGrowNestedPaths" value="false"/>-->
     </bean>
 
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+        <property name="validator" ref="validator"/>
+    </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <!-- 提供检验机制的类： 此处用的而是Hibernate校验器，但是跟Hibernate没有关系 -->
@@ -196,22 +233,22 @@
     <!--<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />-->
     <!--end config servlet3.0 config-->
 
-    <bean id="webLoggerAdvisor" class="com.dmz.web.advisor.LoggerAdvisor"/>
-    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-        <property name="beanNames">
-            <list>
-                <value>*Front</value>
-            </list>
-        </property>
-        <!--拦截器-->
-        <property name="interceptorNames">
-            <list>
-                <!--<value>loggerAdvisor</value>-->
-                <idref bean="webLoggerAdvisor"/>
-                <!-- idref bean会进行检测是否存在,作用同<value>,value不做检测 || idref local属性4.0以后被移出-->
-            </list>
-        </property>
-    </bean>
+    <!--<bean id="webLoggerAdvisor" class="com.dmz.web.advisor.LoggerAdvisor"/>-->
+    <!--<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">-->
+        <!--<property name="beanNames">-->
+            <!--<list>-->
+                <!--<value>*Front</value>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--&lt;!&ndash;拦截器&ndash;&gt;-->
+        <!--<property name="interceptorNames">-->
+            <!--<list>-->
+                <!--&lt;!&ndash;<value>loggerAdvisor</value>&ndash;&gt;-->
+                <!--&lt;!&ndash;<idref bean="webLoggerAdvisor"/>&ndash;&gt;-->
+                <!--&lt;!&ndash; idref bean会进行检测是否存在,作用同<value>,value不做检测 || idref local属性4.0以后被移出&ndash;&gt;-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
     <!--<mvc:annotation-driven />-->
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/" cache-period="31556926"/>
     <mvc:resources mapping="/views/**" location="/WEB-INF/views/" cache-period="31556926"/>
@@ -235,5 +272,35 @@
     </bean>
     <!-- 处理器适配器 所有handler都实现 Controller -->
     <!--<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>-->
+    <bean id="httpTracing" class="brave.spring.beans.HttpTracingFactoryBean">
+        <property name="tracing" ref="tracing"/>
+    </bean>
+
+    <!--&lt;!&ndash;Tracing Logger&ndash;&gt;-->
+
+    <!--<bean id="httpTracing" class="brave.spring.beans.HttpTracingFactoryBean">-->
+        <!--<property name="tracing" ref="tracing"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="tracing" class="brave.spring.beans.TracingFactoryBean">-->
+        <!--<property name="localServiceName" value="DMZ"/>-->
+        <!--<property name="reporter">-->
+            <!--<bean class="brave.spring.beans.AsyncReporterFactoryBean">-->
+                <!--<property name="sender" ref="sender"/>-->
+                <!--&lt;!&ndash; wait up to half a second for any in-flight spans on close &ndash;&gt;-->
+                <!--<property name="closeTimeout" value="500"/>-->
+            <!--</bean>-->
+        <!--</property>-->
+        <!--<property name="currentTraceContext">-->
+            <!--<bean class="brave.context.slf4j.MDCCurrentTraceContext" factory-method="create"/>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="sender" class="zipkin.reporter.okhttp3.OkHttpSender" factory-method="create"-->
+          <!--destroy-method="close">-->
+        <!--<constructor-arg type="java.lang.String" value="http://localhost:9411/api/v1/spans"/>-->
+    <!--</bean>-->
+    <!--&lt;!&ndash;Tracing Logger&ndash;&gt;-->
+
 
 </beans>

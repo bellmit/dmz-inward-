@@ -8,7 +8,7 @@
 	   http://www.springframework.org/schema/context/spring-context.xsd
 	   http://code.alibabatech.com/schema/dubbo
 	   http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
-       default-lazy-init="false">
+       default-lazy-init="true">
 
     <!-- start WebService consume-->
     <!--<bean class="com.dmz.service.webservice.client.WebServiceConfiguration">-->
@@ -30,11 +30,13 @@
     <!-- end WebService consume-->
 
     <!--start dubbo consume service-->
-    <dubbo:application name="dmz-consumer"/>
-    <!--<dubbo:registry address ="zookeeper://192.168.23.113:2181" group="newdubbo"  />-->
-    <dubbo:reference interface="com.dmz.service.dubbo.invoke.UserDmz"  id="ym"/>
+    <!--<dubbo:application name="dmz-consumer"/>-->
+    <dubbo:registry address ="zookeeper://zk:2181"/>
+    <!--<dubbo:consumer filter="tracingDubboConsumer"/>-->
+    <dubbo:reference interface="com.dmz.service.dubbo.invoke.UserDmz"  id="ym" />
     <!--end dubbo consume service-->
-
+    
+    <!--<dubbo:reference interface="com.namibank.account.service.AccountApplicationService" url="dubbo://192.168.100.61:30018" id="accountAppService"/>-->
     <!--start rocketMQ consume service-->
     <!--<bean id="rocketConsumer" class="com.dmz.service.mq.listener.RocketMQConsumer">-->
         <!--<property name="namesrvAddr" value="${mq.consumer.namesrvAddr}" />-->

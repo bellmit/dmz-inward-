@@ -29,6 +29,12 @@ public class Response {
         return this;
     }
 
+    public Response failure(Object data) {
+        this.meta = new Meta(false, ERROR);
+        this.data = data;
+        return this;
+    }
+
     public Meta getMeta() {
         return meta;
     }

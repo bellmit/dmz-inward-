@@ -3,17 +3,18 @@ package com.dmz.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.dmz.basic.Response;
-import com.dmz.basic.exception.DBException;
 import com.dmz.basic.model.Login;
-import com.dmz.basic.model.User;
-import com.dmz.service.constant.basic.LoginDetail;
-import com.dmz.service.iservice.ILoginService;
+import com.dmz.service.implement.A;
+import com.dmz.service.implement.AService;
+import com.dmz.service.implement.CService;
 import com.dmz.service.utils.CreateImageCode;
-import org.apache.commons.lang3.StringUtils;
+import com.dmz.web.advisor.TracingRquestHandlerInterceptor;
+import org.hibernate.validator.constraints.NotBlank;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -36,10 +38,23 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/LoginFront")
+@Validated // 配合 call方法中的直接validate ,  MethodValidationPostProcessor
 public class LoginFront {
 
+    private static Logger logger = LoggerFactory.getLogger(TracingRquestHandlerInterceptor.class);
+
+
     @Resource
-    private ILoginService loginService;
+    private AService aService;
+
+    @Resource
+    private A bService;
+
+    @Resource
+    private CService cService;
+
+    //@Resource
+    //private ILoginService loginService;
 
 //    @Resource
 //    private IUserService userService;
@@ -70,21 +85,21 @@ public class LoginFront {
 //        return "HelloWorld";
     }
 
-    @RequestMapping(value = "/details/{id}", method = RequestMethod.POST)
-    public String LoginDetails(@PathVariable("id") long userId, ModelMap model) {
-        Login loginDetail = null;
-        try {
-            loginDetail = loginService.getLoginInfoById(userId);
-        } catch (DBException.DBServerException e) {
-            e.printStackTrace();
-        } catch (DBException.EmptyData emptyData) {
-            emptyData.printStackTrace();
-        } catch (DBException.MultipleData multipleData) {
-            multipleData.printStackTrace();
-        }
-        model.addAttribute("login", loginDetail);
-        return "loginDetail";
-    }
+    //@RequestMapping(value = "/details/{id}", method = RequestMethod.POST)
+    //public String LoginDetails(@PathVariable("id") long userId, ModelMap model) {
+    //    Login loginDetail = null;
+    //    try {
+    //        loginDetail = loginService.getLoginInfoById(userId);
+    //    } catch (DBException.DBServerException e) {
+    //        e.printStackTrace();
+    //    } catch (DBException.EmptyData emptyData) {
+    //        emptyData.printStackTrace();
+    //    } catch (DBException.MultipleData multipleData) {
+    //        multipleData.printStackTrace();
+    //    }
+    //    model.addAttribute("login", loginDetail);
+    //    return "loginDetail";
+    //}
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public void Login(HttpServletRequest request,
@@ -128,26 +143,27 @@ public class LoginFront {
         }
     }
 
-    @LoginDetail(login = true)
+    //@LoginDetail(login = true) // @Validate @Valid ALL FINE
     @RequestMapping(value = "/loginName", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Response LoginName(@Validated @RequestBody Login login, BindingResult result, HttpServletRequest hrequest, HttpServletResponse hresponse) throws Exception {
-
-        Response response = new Response();
-        System.out.println(result.getAllErrors());
-        String authType = hrequest.getAuthType();
-        if (loginService.checkUserLogin(login)) {
-            return response.success();
-        } else {
-            return response.failure("Name or Password is Wrong");
-        }
-
+    public Response LoginName(@Valid @RequestBody Login login, HttpServletRequest hrequest, HttpServletResponse hresponse) throws Exception {
+        //logger.info("BindResult {}", result);
+        //Response response = new Response();
+        //System.out.println(result.getAllErrors());
+        //String authType = hrequest.getAuthType();
+        //if (loginService.checkUserLogin(login)) {
+        //    return response.success();
+        //} else {
+        //    return response.failure("Name or Password is Wrong");
+        //}
+        System.out.println(login);
+        return null;
     }
 
     @RequestMapping(value = "/dispatch")
     public String dispatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("Dispatch", "DISPATCH");
-        request.getRequestDispatcher("http://192.168.23.159:9999/hello").forward(request, response);
+        request.getRequestDispatcher("http://192.168.100.154:9999/hello").forward(request, response);
         return "index";
 
     }
@@ -179,17 +195,17 @@ public class LoginFront {
         return null;
     }
 
-    @RequestMapping(value = "/loginPhoto", method = {RequestMethod.POST})
-    @ResponseBody
-    public Response ShowLoginPhoto(@RequestBody Login login) {
-        User user = loginService.showUserDetailByLoginName(login);
-        Response response = new Response();
-        if (user == null || StringUtils.isEmpty(user.getAvatar())) {
-            return response.failure();
-        }
-        response.success(user.getAvatar());
-        return response;
-    }
+    //@RequestMapping(value = "/loginPhoto", method = {RequestMethod.POST})
+    //@ResponseBody
+    //public Response ShowLoginPhoto(@RequestBody Login login) {
+    //    User user = loginService.showUserDetailByLoginName(login);
+    //    Response response = new Response();
+    //    if (user == null || StringUtils.isEmpty(user.getAvatar())) {
+    //        return response.failure();
+    //    }
+    //    response.success(user.getAvatar());
+    //    return response;
+    //}
 
     @RequestMapping(value = "/captcha/{codeCount}/{lineCount}/{width}/{heigth}/{id}", method = {RequestMethod.GET})
     public void CreateImageCode(@PathVariable("codeCount") int codeCount, @PathVariable("id") long Id,
@@ -207,6 +223,7 @@ public class LoginFront {
         session.setAttribute("code", vCode.getCode());
         vCode.write(response.getOutputStream());
     }
+
     @RequestMapping(value = "/indexWelcome", method = {RequestMethod.GET, RequestMethod.POST})
     public String index() {
         return "index";
@@ -262,4 +279,61 @@ public class LoginFront {
         model.put("login", login);
         return "login";
     }
+
+    @RequestMapping(value = "/call0")
+    public String callChain0(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute("Dispatch", "DISPATCH");
+        Login login = new Login();
+        bService.b(login);
+
+        bService.c(null);
+//        response.sendRedirect("/LoginFront/commentLogin");
+//        response.sendRedirect("http://192.168.100.154:9988/call1");
+        return "index";
+    }
+
+    @RequestMapping(value = "/call1")
+    public String callChain1(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute("Dispatch", "DISPATCH");
+        logger.error("Start CallChain1 {}", request);
+//        response.sendRedirect("/LoginFront/commentLogin");
+//        response.sendRedirect("http://192.168.100.154:9988/call2");
+//        bService.b();
+        return "redirect:/LoginFront/call2";
+    }
+
+
+    @RequestMapping(value = "/call2")
+    public String callChain2(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute("Dispatch", "DISPATCH");
+        logger.error("Start CallChain3 {}", request);
+//        response.sendRedirect("/LoginFront/commentLogin");
+//        response.sendRedirect("http://192.168.100.154:9988/call1");
+        cService.c();
+        Login login = new Login();
+        aService.b(login);
+        return "index";
+    }
+
+    @RequestMapping(value = "/call")
+    @ResponseBody
+    public String callChain(@NotBlank String string) throws IOException {
+//        response.sendRedirect("/LoginFront/commentLogin");
+//        response.sendRedirect("http://192.168.100.154:9988/call1");
+//        aService.a();
+
+        Login login = new Login();
+        bService.b(login);
+
+        bService.c(null);
+        return string;
+    }
+
+    //@InitBinder
+    //protected void initBinder(WebDataBinder binder) {
+    //    binder.setValidator(validator);
+    //}
+    //
+    //@Autowired
+    //private LocalValidatorFactoryBean validator;
 }

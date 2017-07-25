@@ -10,18 +10,20 @@
        default-lazy-init="false">
 
     <!-- 扫描模块对应的包 -->
-    <context:component-scan base-package="com.dmz.service">
-        <context:exclude-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller"/>
+    <context:component-scan base-package="com.dmz.service" use-default-filters="false">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Service"/>
     </context:component-scan>
+
 
     <!-- 注解式事务 -->
     <!--<tx:annotation-driven transaction-manager="transactionManager" />-->
 
-    <!--advisor|interceptor-->
-    <bean class="com.dmz.service.advisor.LoggerAdvisor" id="loggerAdvisor"/>
-    <bean class="com.dmz.service.advisor.LoggerExceptionAdvice" id="loggerExceptionAdvice"/>
-    <bean class="com.dmz.service.advisor.WriteReadAdvisor" id="writeReadAdvisor"/>
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+        <!--<property name="validator" value="validator"/>-->
+        <property name="proxyTargetClass" value="true"/>
+        <property name="order" value="-2147483648"/>
+    </bean>
 
     <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="beanNames">
@@ -29,32 +31,66 @@
                 <value>*Service</value>
             </list>
         </property>
+
         <!--拦截器-->
         <property name="interceptorNames">
             <list>
-                <idref bean="loggerAdvisor"/>
-                <value>transactionInterceptor</value>
-                <idref bean="writeReadAdvisor"/>
+                <!--<idref bean="loggerAdvisor"/>-->
+                <!--<value>transactionInterceptor</value>-->
+                <!--<idref bean="writeReadAdvisor"/>-->
                 <!--想要事务生效（回滚生效），此拦截器必须接收到异常，上册不能捕获异常 -->
-
+                <idref bean="tracingServiceInterceptor"/>
                 <!-- idref bean会进行检测是否存在,作用同<value>,value不做检测 || idref local属性4.0以后被移出-->
             </list>
         </property>
+        <property name="proxyTargetClass" value="true"/>  <!-- 若为false 则有问题，或者调换MethodValidationPostProcessor位置-->
     </bean>
 
-    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-        <property name="beanNames">
-            <list>
-                <value>*Dao</value>
-            </list>
+
+    <!--advisor|interceptor-->
+    <bean class="com.dmz.service.advisor.LoggerAdvisor" id="loggerAdvisor"/>
+    <bean class="com.dmz.service.advisor.LoggerExceptionAdvice" id="loggerExceptionAdvice"/>
+    <bean class="com.dmz.service.advisor.WriteReadAdvisor" id="writeReadAdvisor"/>
+    <bean class="com.dmz.service.advisor.TracingServiceInterceptor" id="tracingServiceInterceptor"/>
+
+
+    <!--<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">-->
+        <!--<property name="beanNames">-->
+            <!--<list>-->
+                <!--<value>*Dao</value>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--&lt;!&ndash;拦截器&ndash;&gt;-->
+        <!--<property name="interceptorNames">-->
+            <!--<list>-->
+                <!--&lt;!&ndash;<idref bean="loggerExceptionAdvice"/>&ndash;&gt;-->
+                <!--<value>druidStatInterceptor</value>-->
+            <!--</list>-->
+        <!--</property>-->
+
+        <!--<property name="proxyTargetClass" value="false"/>  &lt;!&ndash;若&ndash;&gt;-->
+
+    <!--</bean>-->
+    <bean id="yingmiClient" class="com.dmz.service.YingmiClient"/>
+
+    <bean id="tracing" class="brave.spring.beans.TracingFactoryBean">
+        <property name="localServiceName" value="DMZ"/>
+        <property name="reporter">
+            <bean class="brave.spring.beans.AsyncReporterFactoryBean">
+                <property name="sender" ref="sender"/>
+                <!-- wait up to half a second for any in-flight spans on close -->
+                <property name="closeTimeout" value="500"/>
+            </bean>
         </property>
-        <!--拦截器-->
-        <property name="interceptorNames">
-            <list>
-                <!--<idref bean="loggerExceptionAdvice"/>-->
-                <value>druidStatInterceptor</value>
-            </list>
+        <property name="currentTraceContext">
+            <bean class="brave.context.slf4j.MDCCurrentTraceContext" factory-method="create"/>
         </property>
     </bean>
-    <bean id="yingmiClient" class="com.dmz.service.YingmiClient"/>
+
+    <bean id="sender" class="zipkin.reporter.okhttp3.OkHttpSender" factory-method="create"
+          destroy-method="close">
+        <constructor-arg type="java.lang.String" value="http://Zipkin:9411/api/v1/spans"/>
+    </bean>
+    <!--Tracing Logger-->
+
 </beans>

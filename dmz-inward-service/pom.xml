@@ -58,9 +58,49 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave-instrumentation-spring-webmvc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zipkin.reporter</groupId>
+            <artifactId>zipkin-sender-okhttp3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave-context-slf4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave-spring-beans</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave</artifactId>
         </dependency>
 
         <dependency>
@@ -98,6 +138,11 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <!--<version>RELEASE</version>-->
+        </dependency>
+        <dependency>
+            <groupId>com.dmz.inward</groupId>
+            <artifactId>dmz-inward-expose</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

@@ -1,0 +1,2 @@
+tracingDubboProvider=com.dmz.service.filter.TracingDubboProvider
+#tracingDubboConsumer=com.dmz.service.filter.TracingDubboConsumer

@@ -11,7 +11,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:Spring-basic.xml,classpath:Spring-service.xml,classpath:Spring-utils.xml</param-value>
+        <param-value>classpath:Spring-basic.xml,classpath:Spring-service.xml,classpath:Spring-utils.xml,classpath:Spring-facade-provider.xml,classpath:Spring-facade-consumer.xml</param-value>
     </context-param>
 
     <!-- Spring监听器 -->
@@ -114,32 +114,32 @@
 
 
     <!--start Cors Filter-->
-    <filter>
-        <filter-name>corsFilter</filter-name>
-        <filter-class>com.dmz.web.CorsFilter</filter-class>
-        <async-supported>true</async-supported>
-        <init-param>
-        <param-name>allowOrigin</param-name>
-        <param-value>*</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowMethods</param-name>
-            <param-value>GET,POST,PUT,DELETE,OPTIONS</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowCredentials</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowHeaders</param-name>
-            <param-value>Content-Type</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>corsFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <!--must add the '*'-->
-    </filter-mapping>
+    <!--<filter>-->
+        <!--<filter-name>corsFilter</filter-name>-->
+        <!--<filter-class>com.dmz.web.CorsFilter</filter-class>-->
+        <!--<async-supported>true</async-supported>-->
+        <!--<init-param>-->
+        <!--<param-name>allowOrigin</param-name>-->
+        <!--<param-value>*</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>allowMethods</param-name>-->
+            <!--<param-value>GET,POST,PUT,DELETE,OPTIONS</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>allowCredentials</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>allowHeaders</param-name>-->
+            <!--<param-value>Content-Type</param-value>-->
+        <!--</init-param>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>corsFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+        <!--&lt;!&ndash;must add the '*'&ndash;&gt;-->
+    <!--</filter-mapping>-->
     <!--end Cors Filter-->
 
     <!-- Character Encoding filter -->

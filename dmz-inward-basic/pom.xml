@@ -41,6 +41,11 @@
         </dependency>
         <!--end druid dependencies-->
 
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+
         <!--add mybatis dependencies-->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -79,6 +84,11 @@
             <groupId>com.dmz.inward</groupId>
             <artifactId>dmz-inward-biz</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
         </dependency>
 
     </dependencies>

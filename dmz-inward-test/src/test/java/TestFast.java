@@ -1,5 +1,3 @@
-import java.math.BigDecimal;
-
 /**
  * @author dmz
  * @date 2017/2/27
@@ -47,10 +45,19 @@ public class TestFast {
     }
 
     public static void main(String[] args) {
-        Integer aa = null;
-        System.out.println(String.valueOf(aa));
-        BigDecimal saleRate = new BigDecimal("1");
-        System.out.println(saleRate.divide(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP));
+
+        int[] a = new int[10];
+        int i;
+        for (i=1;i<=10;i++) {
+            a[i] = 0;
+        }
+        return;
+        //System.out.println(NetworkUtils.getHostName());
+        //System.out.println(NetworkUtils.getSiteIp());
+        //Integer aa = null;
+        //System.out.println(String.valueOf(aa));
+        //BigDecimal saleRate = new BigDecimal("1");
+        //System.out.println(saleRate.divide(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP));
 //        System.out.println(System.getProperty("line.separator").length());
 //        System.out.println("V" + (1 + 1) + 0.32);
 //
@@ -66,13 +73,13 @@ public class TestFast {
 //        System.out.println(new String(charArray, 0, 2));
 //        System.out.println(Integer.parseInt(new String(charArray, 0, 2), 16));
 
-        int[] array = {3, 3, 3, 1, 5, 7, 3, 6, 0};
-//        bubbleSort(array);
-        selectSort(array);
-        for (int i = 0; i < array.length; i++) {
-            System.out.print(array[i] + " ");
-        }
-        System.out.println();
+//        int[] array = {3, 3, 3, 1, 5, 7, 3, 6, 0};
+////        bubbleSort(array);
+//        selectSort(array);
+//        for (int i = 0; i < array.length; i++) {
+//            System.out.print(array[i] + " ");
+//        }
+//        System.out.println();
 //        int temp;
 //        for (int i = 0; i < array.length; i++) {
 //            int k = i;
@@ -99,14 +106,14 @@ public class TestFast {
 //        }
 //        System.out.println();
 //
-        int a = 10;
-        int b = 10;
-        System.out.println(a + " " + b);
-
-        a ^= a;  //不能异或自己 result = 0
-        a ^= a;
-        a ^= a;
-        System.out.println(a + " " + a);
+//        int a = 10;
+//        int b = 10;
+//        System.out.println(a + " " + b);
+//
+//        a ^= a;  //不能异或自己 result = 0
+//        a ^= a;
+//        a ^= a;
+//        System.out.println(a + " " + a);
 
     }
 }

@@ -12,11 +12,18 @@
 
     <!--start dubbo provider service-->
     <!--<dubbo:registry address ="zookeeper://192.168.23.113:2181" group="newdubbo"  />-->
-    <dubbo:registry address ="zookeeper://192.168.23.113:2181"  />
+    <dubbo:registry address ="zookeeper://zk:2181"/>
+    <!--<dubbo:application name ="dmz-provider" />-->
+    <!--<dubbo:provider filter="com.dmz.service.filter.TracingDubboProvider"/>-->
+    <dubbo:protocol name ="dubbo" port="38818"/>
 
-    <dubbo:application name ="Provider" />
-    <bean id="dmz" class="com.dmz.service.dubbo.provider.UserDmzDubbo" />
-    <dubbo:service  interface="com.dmz.service.dubbo.invoke.UserDmz"  ref="dmz"   />
+    <dubbo:provider filter="tracingDubboProvider"/>
+
+    <!--<bean id="dmz" class="com.dmz.service.dubbo.provider.UserDmzDubbo" />-->
+
+    <!--<dubbo:service  interface="com.dmz.service.dubbo.invoke.UserDmz"  ref="dmz"   />-->
+
+    <!--<dubbo:provider filter="com.dmz.service.filter.TracingDubboProvider"/>-->
     <!--end dubbo provider service-->
 
     <!--start rocketMQ provider service-->

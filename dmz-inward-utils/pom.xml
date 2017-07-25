@@ -19,6 +19,11 @@
         </dependency>
         <!--end add spring bean-->
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
         <!--add apache.poi dependencies-->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -34,6 +39,11 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dmz.inward</groupId>
+            <artifactId>dmz-inward-utils</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <!--end add apache.poi dependencies-->
 

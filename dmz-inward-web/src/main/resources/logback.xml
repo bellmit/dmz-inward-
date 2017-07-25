@@ -17,7 +17,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         %logger{50} 表示logger名字最长50个字符，否则按照句点分割。 %msg：日志消息，%n是换行符
         -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId}/%X{spanId}] [%thread] %-5level %logger{50} - %msg%n</pattern>
         </layout>
     </appender>
 
@@ -53,7 +53,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         日志输出格式：%d表示日期时间，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %logger{50} 表示logger名字最长50个字符，否则按照句点分割。 %msg：日志消息，%n是换行符
         -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] - [ %-5level ] [ %logger{50} : %line ] - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId}/%X{spanId}] [%thread] %-5level %logger{50} - %msg%n</pattern>
         </layout>
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="com.dmz.service.log.JsonLayoutExt">
@@ -85,7 +85,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         <queueSize>1000</queueSize>
         <appender-ref ref="appLogAppender"/>
     </appender>
-    <logger name="com.dmz" level="info" additivity="false">  <!--additivity = "true"  则 console和输出文件都有记录-->
+    <logger name="com.dmz" level="info" additivity="true">  <!--additivity = "true"  则 console和输出文件都有记录-->
         <appender-ref ref="ASYNC"/>
     </logger>
 
@@ -96,5 +96,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
     <root level="error">
         <appender-ref ref="stdout"/>
     </root>
+
+    <logger name="org.springframework" level="DEBUG" />
 
 </configuration>

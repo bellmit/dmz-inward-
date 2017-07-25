@@ -4,7 +4,7 @@
 <generatorConfiguration>
 
     <!--用于启动MBG的jdbc jar-->
-    <classPathEntry location="C:\Users\dmz\mysql-connector-java-5.1.13-bin.jar"/>
+    <classPathEntry location="C:\Users\yinming\.m2\repository\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar"/>
 
     <context id="mybatis" targetRuntime="MyBatis3Simple"
              defaultModelType="flat">
@@ -22,7 +22,7 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://local:13306/dmz_inward?" userId="root"
+                        connectionURL="jdbc:mysql://mysql:3306/dmz_inward?" userId="root"
                         password="123456"/>
 
         <!--When the property is true,
@@ -43,7 +43,7 @@
                              targetProject="src/main/java" type="XMLMAPPER"/>
 
 
-        <table tableName="t_able" domainObjectName="domain">
+        <table tableName="t_dmz_user" domainObjectName="User">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 

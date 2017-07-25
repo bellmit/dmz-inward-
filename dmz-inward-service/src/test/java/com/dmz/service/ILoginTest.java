@@ -85,14 +85,14 @@ public class ILoginTest {
             setDataSql = "INSERT INTO `dmz_login`" +
             " VALUES ('127', '036dfc2d09e94333b72c43ece24c098-', 'dmz', '527386108', '0', '1', '0', '0', 'false', '2016-11-24 15:21:37', '2016-11-24 15:21:37');\n")
     public void testGetUserInfoByLogin() {
-        Login login = new Login();
-        login.setLoginName("dmz");
-        login.setUserNo("036dfc2d09e94333b72c43ece24c098-");
-        login = loginService.getLoginInfoByLogin(login);
-        User user = new User();
-        user.setUserNo(login.getUserNo());
-        user = userService.getUserInfoByUser(user);
-        System.out.println(JSON.toJSONString(user));
+        //Login login = new Login();
+        //login.setLoginName("dmz");
+        //login.setUserNo("036dfc2d09e94333b72c43ece24c098-");
+        //login = loginService.getLoginInfoByLogin(login);
+        //User user = new User();
+        //user.setUserNo(login.getUserNo());
+        //user = userService.getUserInfoByUser(user);
+        //System.out.println(JSON.toJSONString(user));
 
     }
 
