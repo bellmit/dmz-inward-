@@ -1,5 +1,6 @@
 package com.dmz.service.dubbo.provider;
 
+import com.dmz.basic.model.Login;
 import com.dmz.service.dubbo.invoke.UserDmz;
 import com.dmz.service.implement.AService;
 
@@ -15,5 +16,6 @@ public class UserDmzDubbo implements UserDmz {
 
     public void showUserName() {
         aService.a();
+        aService.b(new Login());
     }
 }

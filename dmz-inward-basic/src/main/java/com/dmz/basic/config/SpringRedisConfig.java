@@ -1,0 +1,61 @@
+package com.dmz.basic.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import redis.clients.jedis.JedisPoolConfig;
+
+/**
+ * @author dmz
+ * @date 2017/8/25
+ */
+@Configuration
+public class SpringRedisConfig {
+
+    @Value("${redis.config.maxTotal}")
+    private Integer maxTotal;
+
+    @Value("${redis.config.maxIdle}")
+    private Integer maxIdle;
+
+    @Value("${redis.config.minIdle}")
+    private Integer minIdle;
+
+    @Value("${redis.config.maxWaitMillis}")
+    private Integer maxWaitMillis;
+
+    @Value("${redis.config.hostName}")
+    private String hostName;
+
+    @Value("${redis.config.passwd}")
+    private String passwd;
+
+    public @Bean
+    JedisPoolConfig jedisPoolConfig() {
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMaxTotal(maxTotal);
+        jedisPoolConfig.setMaxIdle(maxIdle);
+        jedisPoolConfig.setMinIdle(minIdle);
+        jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
+        jedisPoolConfig.setTestOnBorrow(true);
+        return jedisPoolConfig;
+    }
+
+    public @Bean
+    JedisConnectionFactory jedisConnectionFactory() {
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(jedisPoolConfig());
+        jedisConnectionFactory.setHostName(hostName);
+        jedisConnectionFactory.setPassword(passwd);
+        return jedisConnectionFactory;
+    }
+
+
+    public @Bean
+    RedisTemplate redisTemplate() {
+        RedisTemplate redisTemplate = new RedisTemplate();
+        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        return redisTemplate;
+    }
+}

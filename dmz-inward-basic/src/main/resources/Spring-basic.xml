@@ -153,4 +153,20 @@
         <!--</property>-->
     </bean>
 
+    <!--&lt;!&ndash; 连接池 &ndash;&gt;-->
+    <!--<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">-->
+        <!--<property name="maxTotal" value="${redis.config.maxTotal}" />-->
+        <!--<property name="maxIdle" value="${redis.config.maxIdle}" />-->
+        <!--<property name="minIdle" value="${redis.config.minIdle}" />-->
+        <!--<property name="maxWaitMillis" value="${redis.config.maxWaitMillis}" />-->
+        <!--<property name="testOnBorrow" value="true" />-->
+    <!--</bean>-->
+    <!--<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"-->
+          <!--p:use-pool="true" p:hostName="${redis.config.hostName}" p:password="${redis.config.passwd}">-->
+        <!--<constructor-arg type="redis.clients.jedis.JedisPoolConfig" ref="jedisPoolConfig"/>-->
+    <!--</bean>-->
+    <!--&lt;!&ndash; redis template definition &ndash;&gt;-->
+    <!--<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"-->
+          <!--p:connection-factory-ref="jedisConnectionFactory"/>-->
+
 </beans>

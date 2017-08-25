@@ -91,6 +91,58 @@
             <artifactId>spring-boot</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+        </dependency>
+
+        <!--&lt;!&ndash;mongo sync&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.mongodb</groupId>-->
+            <!--<artifactId>mongodb-driver</artifactId>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;monitor&ndash;&gt;-->
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <!--如果存在编译需要,而发布不需要的jar包，可以用scope标签，值设为provided-->
+            <!--* compile，缺省值，适用于所有阶段，会随着项目一起发布。-->
+            <!--* provided，类似compile，期望JDK、容器或使用者会提供这个依赖。如servlet.jar。-->
+            <!--* runtime，只在运行时使用，如JDBC驱动，适用运行和测试阶段。-->
+            <!--* test，只在测试时使用，用于编译和运行测试代码。不会随项目发布。-->
+            <!--* system，类似provided，需要显式提供包含依赖的jar，Maven不会在Repository中查找它。-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <!--<scope>test</scope>-->
+        </dependency>
+
     </dependencies>
 
     <profiles>

@@ -3,10 +3,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context
-	http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+	http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
        default-lazy-init="false">
 
     <!-- 扫描模块对应的包 -->
@@ -25,6 +26,7 @@
         <property name="order" value="-2147483648"/>
     </bean>
 
+    <!--多个 autoProxyCreator会创建多次代理，循环注入时会导致问题 This means that said other beans do not use the final version of the bean-->
     <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="beanNames">
             <list>
@@ -53,6 +55,16 @@
     <bean class="com.dmz.service.advisor.WriteReadAdvisor" id="writeReadAdvisor"/>
     <bean class="com.dmz.service.advisor.TracingServiceInterceptor" id="tracingServiceInterceptor"/>
 
+    <bean id="customizableTraceInterceptor" class="org.springframework.aop.interceptor.CustomizableTraceInterceptor">
+        <property name="enterMessage" value="Entering $[methodName]($[arguments])"/>
+        <property name="exitMessage" value="Leaving $[methodName](): $[returnValue]"/>
+    </bean>
+    <!--推荐
+    在解析的时候会判断是否已经存在InfrastructureAdvisorAutoProxyCreator，AspectJAwareAdvisorAutoProxyCreator，AnnotationAwareAspectJAutoProxyCreator三者之一，有就合并，否则就注册一个，因此始终就只会有一个代理创建器。
+    <aop:config>会交给org.springframework.aop.config.AopNamespaceHandler处理 -->
+    <!--<aop:config>-->
+        <!--<aop:advisor advice-ref="customizableTraceInterceptor" pointcut="execution(public * *.*(..))"/>-->
+    <!--</aop:config>-->
 
     <!--<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">-->
         <!--<property name="beanNames">-->

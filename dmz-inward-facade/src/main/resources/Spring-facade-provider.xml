@@ -17,11 +17,11 @@
     <!--<dubbo:provider filter="com.dmz.service.filter.TracingDubboProvider"/>-->
     <dubbo:protocol name ="dubbo" port="38818"/>
 
-    <dubbo:provider filter="tracingDubboProvider"/>
+    <!--<dubbo:provider filter="tracingDubboProvider"/>-->
 
-    <!--<bean id="dmz" class="com.dmz.service.dubbo.provider.UserDmzDubbo" />-->
+    <bean id="dmz" class="com.dmz.service.dubbo.provider.UserDmzDubbo" />
 
-    <!--<dubbo:service  interface="com.dmz.service.dubbo.invoke.UserDmz"  ref="dmz"   />-->
+    <dubbo:service  interface="com.dmz.service.dubbo.invoke.UserDmz"  ref="dmz" />
 
     <!--<dubbo:provider filter="com.dmz.service.filter.TracingDubboProvider"/>-->
     <!--end dubbo provider service-->

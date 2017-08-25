@@ -4,7 +4,10 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -16,9 +19,19 @@ import javax.sql.DataSource;
  * @author dmz
  * @date 2017/7/17
  */
-//@Configuration
-//@MapperScan(value = "com.dmz.basic.mapper")
+@Configuration
+@MapperScan(value = "com.dmz.basic.mapper")
 public class DataConfig {
+
+    @Value("${mysql.url}")
+    private String jdbcUrl;
+
+    @Value("${mysql.name}")
+    private String name;
+
+    @Value("${mysql.password}")
+    private String password;
+
 
     @Bean(name = "transactionManager")
     @Primary
@@ -31,7 +44,7 @@ public class DataConfig {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sessionFactory.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));
+        sessionFactory.setMapperLocations(resolver.getResources("classpath:sqlMapper/*.xml"));
         sessionFactory.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
         sessionFactory.setDataSource(dataSource());
         return sessionFactory.getObject();
@@ -42,9 +55,9 @@ public class DataConfig {
     public DataSource dataSource() {
         try {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:mysql://mysql:3306/base?useUnicode=true&amp;characterEncoding=utf8");
-            config.setUsername("base");
-            config.setPassword("base123");
+            config.setJdbcUrl(jdbcUrl);
+            config.setUsername(name);
+            config.setPassword(password);
             config.addDataSourceProperty("cachePrepStmts", true);
             config.addDataSourceProperty("prepStmtCacheSize", 250);
             config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
@@ -64,35 +77,35 @@ public class DataConfig {
         return null;
     }
 
-    @Bean(name = "transactionManager2")
-    public DataSourceTransactionManager transactionManager2() {
-        return new DataSourceTransactionManager(dataSource2());
-    }
-
-    @Bean
-    public DataSource dataSource2() {
-        HikariDataSource dataSource = new HikariDataSource();
-        try {
-            dataSource.setJdbcUrl("jdbc:mysql://mysql:3306/base?useUnicode=true&amp;characterEncoding=utf8");
-            dataSource.setUsername("dbbackup");
-            dataSource.setPassword("wzo8QtV0FqlbmYwUVsyD");
-            dataSource.addDataSourceProperty("cachePrepStmts", "true");
-            dataSource.addDataSourceProperty("prepStmtCacheSize", "250");
-            dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        } catch (Exception e) {
-            e.getMessage();
-        }
-        return dataSource;
-    }
-
-    @Bean
-    public SqlSessionFactory sqlSessionFactory2() throws Exception {
-        SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sessionFactory.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));
-        sessionFactory.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
-        sessionFactory.setDataSource(dataSource2());
-        return sessionFactory.getObject();
-    }
+    //@Bean(name = "transactionManager2")
+    //public DataSourceTransactionManager transactionManager2() {
+    //    return new DataSourceTransactionManager(dataSource2());
+    //}
+    //
+    //@Bean
+    //public DataSource dataSource2() {
+    //    HikariDataSource dataSource = new HikariDataSource();
+    //    try {
+    //        dataSource.setJdbcUrl("jdbc:mysql://mysql:3306/base?useUnicode=true&amp;characterEncoding=utf8");
+    //        dataSource.setUsername("dbbackup");
+    //        dataSource.setPassword("wzo8QtV0FqlbmYwUVsyD");
+    //        dataSource.addDataSourceProperty("cachePrepStmts", "true");
+    //        dataSource.addDataSourceProperty("prepStmtCacheSize", "250");
+    //        dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+    //    } catch (Exception e) {
+    //        e.getMessage();
+    //    }
+    //    return dataSource;
+    //}
+    //
+    //@Bean
+    //public SqlSessionFactory sqlSessionFactory2() throws Exception {
+    //    SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+    //    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    //    sessionFactory.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));
+    //    sessionFactory.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
+    //    sessionFactory.setDataSource(dataSource2());
+    //    return sessionFactory.getObject();
+    //}
 
 }
