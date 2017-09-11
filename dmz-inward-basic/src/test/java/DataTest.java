@@ -5,6 +5,8 @@ import com.dmz.basic.model.Login;
 import com.dmz.service.constant.basic.LoginConstant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -21,6 +23,9 @@ public class DataTest {
 
     @Resource
     private IUserDocumentDao userDocumentDao;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @Resource
@@ -51,6 +56,13 @@ public class DataTest {
         login.setUpdateTime(new Date());
         loginDao.insertLogin(login);
 
+    }
+
+
+    @Test
+    public void testRedis() {
+        redisTemplate.opsForSet().add("dmz_inward:test:", "Hello Redis");
+        //redisTemplate.expire("dmz_inward:test", 10, TimeUnit.SECONDS);
     }
 
 }

@@ -46,12 +46,27 @@ public class TestFast {
 
     public static void main(String[] args) {
 
-        int[] a = new int[10];
-        int i;
-        for (i=1;i<=10;i++) {
-            a[i] = 0;
-        }
-        return;
+        StringBuffer body = new StringBuffer();
+        body.append("{\nlong start = System.currentTimeMillis();\n");
+            body.append("String" + " result = ");
+        body.append("buildString$impl" + "($$);\n");
+
+        //  finish body text generation with call to print the timing
+        //  information, and return saved value (if not void)
+        body.append("System.out.println(\"Call to method " + "buildString$impl" +
+                " took \" +\n (System.currentTimeMillis()-start) + " +
+                "\" ms.\");\n");
+            body.append("return result;\n");
+        body.append("}");
+
+        System.out.println(body);
+
+        //int[] a = new int[10];
+        //int i;
+        //for (i=1;i<=10;i++) {
+        //    a[i] = 0;
+        //}
+        //return;
         //System.out.println(NetworkUtils.getHostName());
         //System.out.println(NetworkUtils.getSiteIp());
         //Integer aa = null;
