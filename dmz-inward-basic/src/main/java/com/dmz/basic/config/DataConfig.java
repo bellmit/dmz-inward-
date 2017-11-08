@@ -1,5 +1,6 @@
 package com.dmz.basic.config;
 
+import com.github.pagehelper.PageInterceptor;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,6 +15,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * @author dmz
@@ -32,10 +34,23 @@ public class DataConfig {
     @Value("${mysql.password}")
     private String password;
 
+    //@Value("${pagehelper.helperDialect}")
+    //private String dialect;
+    //
+    //@Value("${pagehelper.params}")
+    //private String params;
+    //
+    //@Value("${pagehelper.reasonable}")
+    //private Boolean reasonable;
+    //
+    //@Value("${pagehelper.supportMethodsArguments}")
+    //private Boolean supportMethodsArguments;
+
 
     @Bean(name = "transactionManager")
     @Primary
     public PlatformTransactionManager transactionManager() {
+
         return new DataSourceTransactionManager(dataSource());
     }
 
@@ -47,7 +62,17 @@ public class DataConfig {
         sessionFactory.setMapperLocations(resolver.getResources("classpath:sqlMapper/*.xml"));
         sessionFactory.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
         sessionFactory.setDataSource(dataSource());
-        return sessionFactory.getObject();
+        PageInterceptor interceptor = new PageInterceptor();
+        Properties props = new Properties();
+        props.setProperty("reasonable", "true");
+        props.setProperty("supportMethodsArguments", "true");
+        props.setProperty("params", "count=countSql");
+        props.setProperty("helperDialect", "mysql");
+        props.setProperty("rowBoundsWithCount", "true");
+        interceptor.setProperties(props);
+        SqlSessionFactory sqlSessionFactory = sessionFactory.getObject();
+        sqlSessionFactory.getConfiguration().addInterceptor(interceptor);
+        return sqlSessionFactory;
     }
 
     @Bean

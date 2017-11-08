@@ -34,7 +34,7 @@ public class DataTest {
     @Test
     public void testSaveUserDocument() {
         UserDocument user = new UserDocument();
-        user.setName("DMZ");
+        user.setName("DMZS");
         userDocumentDao.saveUser(user);
         System.out.println();
 

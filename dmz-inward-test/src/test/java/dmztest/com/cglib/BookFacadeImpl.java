@@ -6,5 +6,11 @@ package dmztest.com.cglib;
 public class BookFacadeImpl implements BookFacade{
     public void addBook() {
         System.out.println("add a book...");
+        this.addBook2();
+    }
+
+    @Override
+    public void addBook2() {
+        System.out.println("add a book 2...");
     }
 }

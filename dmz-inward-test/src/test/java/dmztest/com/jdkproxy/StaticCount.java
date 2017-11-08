@@ -7,4 +7,9 @@ public class StaticCount implements Count {
     public void update() {
         System.out.println("updating staticCount...");
     }
+
+    @Override
+    public void update2() {
+
+    }
 }

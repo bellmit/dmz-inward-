@@ -6,5 +6,10 @@ package dmztest.com.jdkproxy;
 public class DynamicCount extends Test implements Count {
     public void update() {
         System.out.println("updating DynamicCount...");
+        update2();
+    }
+
+    public void update2() {
+        System.out.println("updating DynamicCount 2...");
     }
 }

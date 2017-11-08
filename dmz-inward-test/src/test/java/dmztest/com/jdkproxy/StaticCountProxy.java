@@ -14,4 +14,9 @@ public class StaticCountProxy implements Count {
         System.out.println("End Transcation...");
 
     }
+
+    @Override
+    public void update2() {
+
+    }
 }

@@ -5,4 +5,6 @@ package dmztest.com.jdkproxy;
  */
 public interface Count {
     void update();
+
+    void update2();
 }

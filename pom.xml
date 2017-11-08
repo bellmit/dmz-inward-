@@ -118,6 +118,7 @@
         <sel4j.version>1.7.25</sel4j.version>
 
         <zipkin-reporter.version>0.9.0</zipkin-reporter.version>
+        <mybatis-pageHelper.version>1.0.0</mybatis-pageHelper.version>
 
         <jedis.version>2.9.0</jedis.version>
         <mongo-version>3.5.0</mongo-version>
@@ -624,6 +625,12 @@
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>1.4.0.RELEASE</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${mybatis-pageHelper.version}</version>
             </dependency>
 
         </dependencies>

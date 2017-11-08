@@ -5,4 +5,6 @@ package dmztest.com.cglib;
  */
 public interface BookFacade {
     void addBook();
+
+    void addBook2();
 }

@@ -1,4 +1,4 @@
-package dmz.IPAddressUtil;
+package dmztest.IPAddressUtil;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
