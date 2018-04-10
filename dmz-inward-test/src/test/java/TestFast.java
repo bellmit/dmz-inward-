@@ -4,8 +4,9 @@
  */
 public class TestFast {
     public static void selectSort(int[] numbers) {
+
+
         int size = numbers.length; //数组长度
-        int temp; //中间变量
 
         for (int i = 0; i < size; i++) {
             int k = i;   //待确定的位置
@@ -45,6 +46,9 @@ public class TestFast {
     }
 
     public static void main(String[] args) {
+
+        System.out.println(Runtime.getRuntime().availableProcessors() + 1);
+
 
         StringBuffer body = new StringBuffer();
         body.append("{\nlong start = System.currentTimeMillis();\n");

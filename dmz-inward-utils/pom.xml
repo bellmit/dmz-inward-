@@ -24,6 +24,12 @@
             <artifactId>spring-context</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+        </dependency>
+
         <!--add apache.poi dependencies-->
         <dependency>
             <groupId>org.apache.poi</groupId>

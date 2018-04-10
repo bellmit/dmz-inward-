@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * @author dmz
  * @date 2017/2/6
+ * Craig, Landin, and Hagersten
  */
 public class CLHLock {
 

@@ -17,6 +17,7 @@ public class DynamicCountProxy implements InvocationHandler {
         System.out.println("start dynamic proxy...");
         Object result = method.invoke(target,args);
         System.out.println("end dynamic proxy...");
+
         return result;
     }
 }

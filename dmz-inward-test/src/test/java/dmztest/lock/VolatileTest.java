@@ -1,12 +1,15 @@
 package dmztest.lock;
 
+import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+
 /**
  * @author dmz
  * @date 2017/2/17
  */
 class VolatileWhile {
 
-    private  boolean spin = true;
+    private volatile boolean spin = true;
 
     public void spinStart() {
         while (spin) {
@@ -25,30 +28,35 @@ class VolatileWhile {
 }
 
 public class VolatileTest {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
 
         VolatileWhile vw = new VolatileWhile();
-        Thread t_one = new Thread(() -> {
-            vw.spinStart();
-        });
-        Thread t2 = new Thread(() -> {
-            vw.spinStart();
-        });
-        Thread t3 = new Thread(() -> {
-            vw.spinStart();
-        });
-        Thread t4 = new Thread(() -> {
-            vw.spinStart();
-        });
-        t_one.start();
-//        t2.start();
-//        t3.start();
-//        t4.start();
-        Thread.sleep(1000);
-//        System.out.println("============");
-        Thread t_two = new Thread(() -> {
-            vw.spinEnd();
-        });
-        t_two.start();
+        CountDownLatch singleStart = new CountDownLatch(1);
+        CountDownLatch threadStart = new CountDownLatch(11);
+
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                try {
+                    singleStart.await();
+                    vw.spinStart();
+                    threadStart.countDown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+        new Thread(() -> {
+            try {
+                singleStart.await();
+                vw.spinEnd();
+                threadStart.countDown();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        singleStart.countDown();
+        threadStart.await();
+
     }
 }

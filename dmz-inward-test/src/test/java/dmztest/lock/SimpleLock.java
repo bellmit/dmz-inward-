@@ -1,6 +1,7 @@
 package dmztest.lock;
 
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author dmz
@@ -12,6 +13,8 @@ public class SimpleLock extends AbstractQueuedSynchronizer {
 
     @Override
     protected boolean tryAcquire(int arg) {
+        new ReentrantLock();
+
         if (compareAndSetState(0, 1)) {
             setExclusiveOwnerThread(Thread.currentThread());
             return true;

@@ -134,6 +134,12 @@
     <dependencyManagement>
         <dependencies>
 
+            <dependency>
+                <groupId>com.rabbitmq</groupId>
+                <artifactId>amqp-client</artifactId>
+                <version>5.0.0</version>
+            </dependency>
+
             <!-- start add spring dependencies -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -591,11 +597,11 @@
                 <!--<version>${brave.version}</version>-->
             <!--</dependency>-->
 
-            <!--<dependency>-->
-                <!--<groupId>javax.validation</groupId>-->
-                <!--<artifactId>validation-api</artifactId>-->
-                <!--<version>${validation.version}</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation.version}</version>
+            </dependency>
 
             <!--<dependency>-->
                 <!--<groupId>org.glassfish</groupId>-->
@@ -603,7 +609,12 @@
                 <!--<version>${el.version}</version>-->
             <!--</dependency>-->
 
-
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>3.5.5</version>
+            </dependency>
+            
             <!-- Needed for PDF View -->
             <dependency>
                 <groupId>com.lowagie</groupId>
@@ -612,6 +623,12 @@
             </dependency>
 
 
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.16</version>
+                <scope>provided</scope>
+            </dependency>
 
             <!--SpringBoot-->
             <dependency>

@@ -1,5 +1,9 @@
 package com.dmz.basic.config;
 
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
+import org.redisson.config.SingleServerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +38,19 @@ public class SpringRedisConfig {
 
     @Value("${redis.config.port}")
     private Integer port;
+
+
+    public @Bean
+    RedissonClient redissonClient(){
+        Config config = new Config();
+        SingleServerConfig singleServer = config.useSingleServer();
+        singleServer.setAddress("redis://192.168.110.41:6379");
+        singleServer.setPassword(passwd);
+        //singleServer.setConnectTimeout();
+        singleServer.setTimeout(10000);
+        RedissonClient redisson = Redisson.create(config);
+        return redisson;
+    }
 
     public @Bean
     JedisPoolConfig jedisPoolConfig() {
