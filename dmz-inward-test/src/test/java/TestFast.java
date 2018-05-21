@@ -2,7 +2,19 @@
  * @author dmz
  * @date 2017/2/27
  */
+
+class Fi {
+
+    static
+    {
+        System.out.println("SubClass init");
+    }
+
+    static  int a=10;
+
+}
 public class TestFast {
+
     public static void selectSort(int[] numbers) {
 
 
@@ -46,24 +58,25 @@ public class TestFast {
     }
 
     public static void main(String[] args) {
+        System.out.println(Fi.a);
 
-        System.out.println(Runtime.getRuntime().availableProcessors() + 1);
-
-
-        StringBuffer body = new StringBuffer();
-        body.append("{\nlong start = System.currentTimeMillis();\n");
-            body.append("String" + " result = ");
-        body.append("buildString$impl" + "($$);\n");
-
-        //  finish body text generation with call to print the timing
-        //  information, and return saved value (if not void)
-        body.append("System.out.println(\"Call to method " + "buildString$impl" +
-                " took \" +\n (System.currentTimeMillis()-start) + " +
-                "\" ms.\");\n");
-            body.append("return result;\n");
-        body.append("}");
-
-        System.out.println(body);
+//        System.out.println(Runtime.getRuntime().availableProcessors() + 1);
+//
+//
+//        StringBuffer body = new StringBuffer();
+//        body.append("{\nlong start = System.currentTimeMillis();\n");
+//            body.append("String" + " result = ");
+//        body.append("buildString$impl" + "($$);\n");
+//
+//        //  finish body text generation with call to print the timing
+//        //  information, and return saved value (if not void)
+//        body.append("System.out.println(\"Call to method " + "buildString$impl" +
+//                " took \" +\n (System.currentTimeMillis()-start) + " +
+//                "\" ms.\");\n");
+//            body.append("return result;\n");
+//        body.append("}");
+//
+//        System.out.println(body);
 
         //int[] a = new int[10];
         //int i;
