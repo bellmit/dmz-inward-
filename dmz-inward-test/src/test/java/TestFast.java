@@ -11,6 +11,7 @@ class Fi {
     }
 
     static  int a=10;
+    // TODO
 
 }
 public class TestFast {
