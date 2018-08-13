@@ -44,8 +44,8 @@ public class SpringRedisConfig {
     RedissonClient redissonClient(){
         Config config = new Config();
         SingleServerConfig singleServer = config.useSingleServer();
-        singleServer.setAddress("redis://192.168.110.41:6379");
-        singleServer.setPassword(passwd);
+        singleServer.setAddress("redis://8lovelife.com:6379");
+//        singleServer.setPassword(passwd);
         //singleServer.setConnectTimeout();
         singleServer.setTimeout(10000);
         RedissonClient redisson = Redisson.create(config);
@@ -71,7 +71,6 @@ public class SpringRedisConfig {
         jedisConnectionFactory.setPort(port);
         return jedisConnectionFactory;
     }
-
 
     public @Bean
     RedisTemplate redisTemplate() {

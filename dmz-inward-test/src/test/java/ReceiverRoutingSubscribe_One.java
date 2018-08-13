@@ -13,7 +13,7 @@ public class ReceiverRoutingSubscribe_One {
 
     public static void main(String[] args) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("192.168.110.41");
+        factory.setHost("101.132.38.146");
         factory.setPort(5672);
         factory.setUsername("namibank");
         factory.setPassword("namibank123");

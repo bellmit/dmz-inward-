@@ -19,12 +19,12 @@ public class MultiFutureTaskTest {
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
 
         //ExecutorCompletionService();
-        //CompletionFuture();
+        CompletionFuture();
         //CompletableFuture();
         //ComposeDependentFutures();
         //CombineIndependentFutures();
         //CombineAllFutures();
-        AnyofFuture();
+//        AnyofFuture();
         System.out.println("HHHH");
     }
 
@@ -134,14 +134,17 @@ public class MultiFutureTaskTest {
         }
 
 
-        for (Future<Integer> future : list) {
-            //System.out.println(future.get());
+//        for (Future<Integer> future : list) {
+//            //System.out.println(future.get());
+//            System.out.println(completionService.getBlockingQueue().take().get());
+//        }
+
+        while (true) {
             System.out.println(completionService.getBlockingQueue().take().get());
+
         }
-
-
-        System.out.format("Done after %d", System.currentTimeMillis() - startTime);
-        executor.shutdown();
+//        System.out.format("Done after %d", System.currentTimeMillis() - startTime);
+//        executor.shutdown();
     }
 }
 

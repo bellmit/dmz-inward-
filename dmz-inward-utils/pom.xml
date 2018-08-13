@@ -46,11 +46,11 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.dmz.inward</groupId>
-            <artifactId>dmz-inward-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.dmz.inward</groupId>-->
+            <!--<artifactId>dmz-inward-utils</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
         <!--end add apache.poi dependencies-->
 
     </dependencies>

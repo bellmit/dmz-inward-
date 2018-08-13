@@ -51,7 +51,7 @@ public class SpringMongoConfig {
     private String databaseName;
 
     @Bean
-    public MongoClient mongoClient() throws Exception {
+    public MongoClient mongoClient() {
         //.sslEnabled(true)
         MongoClientOptions.Builder builder = MongoClientOptions.builder();
         builder.connectionsPerHost(connectionsPerHost)
@@ -65,12 +65,12 @@ public class SpringMongoConfig {
     }
 
     public @Bean
-    MongoDbFactory mongoDbFactory() throws Exception {
+    MongoDbFactory mongoDbFactory() {
         return new SimpleMongoDbFactory(mongoClient(), databaseName);
     }
 
     public @Bean
-    MongoTemplate mongoTemplate() throws Exception {
+    MongoTemplate mongoTemplate() {
         MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
         return mongoTemplate;
     }
